@@ -3,6 +3,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <JuceHeader.h>
 #include "PlugInGUISettings.h"
+#include "SynchronBlockProcessor.h"
 class SimpleGainParameter
 {
 public:
@@ -15,12 +16,13 @@ public:
 
 
 
-class SimpleGain
+class SimpleGain : public SynchronBlockProcessor
 {
 public:
     SimpleGain();
     void prepareToPlay();
-    void processBlock(juce::AudioBuffer<float>&);
+    // void processBlock(juce::AudioBuffer<float>&);
+    int  processSynchronBlock(std::vector <std::vector<float>>& data, juce::MidiBuffer& midiMessages);
     void setGain(float newgain_db);
 
     void prepareParameter(std::unique_ptr<AudioProcessorValueTreeState>&  vts);

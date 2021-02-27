@@ -1,7 +1,7 @@
 #include "SimpleGain.h"
 
-SimpleGain::SimpleGain()
-:m_gain(1.f)
+SimpleGain::SimpleGain() 
+:m_gain(1.f), SynchronBlockProcessor()
 {
 
 }
@@ -9,10 +9,11 @@ void SimpleGain::prepareToPlay()
 {
     
 }
-void SimpleGain::processBlock(juce::AudioBuffer<float>& buffer)
+/*void SimpleGain::processBlock(juce::AudioBuffer<float>& buffer)
+
 {
     updateParameter();
-    
+
     auto totalNumChannels  = buffer.getNumChannels();
 
     auto nrofsamplesinblock = buffer.getNumSamples();
@@ -23,6 +24,22 @@ void SimpleGain::processBlock(juce::AudioBuffer<float>& buffer)
         for (auto kk = 0 ; kk < nrofsamplesinblock; ++kk)
             channelData[kk] *= m_gain;
     }
+}
+//*/
+int SimpleGain::processSynchronBlock(std::vector <std::vector<float>>& data, juce::MidiBuffer& midiMessages) 
+{
+    
+    updateParameter();
+
+    auto totalNumChannels  = data.size();
+
+    auto nrofsamplesinblock = data[0].size();
+
+    for (int channel = 0; channel < totalNumChannels; ++channel)
+    {
+        for (auto kk = 0 ; kk < nrofsamplesinblock; ++kk)
+            data[channel][kk] *= m_gain;
+    }    
 }
 void SimpleGain::setGain(float newgain_db)
 {

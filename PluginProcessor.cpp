@@ -39,6 +39,7 @@ SimpleGainAudioProcessor::SimpleGainAudioProcessor()
 	m_presets.loadfromFileAllUserPresets();    
     
     m_simplegain.prepareParameter(m_parameterVTS);
+    
 }
 
 SimpleGainAudioProcessor::~SimpleGainAudioProcessor()
@@ -119,6 +120,7 @@ void SimpleGainAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     juce::ignoreUnused (samplesPerBlock);
     m_fs = sampleRate;
     m_simplegain.prepareToPlay();
+    m_simplegain.setDesiredBlockSizeMiliSeconds(200.0, sampleRate);
 }
 
 void SimpleGainAudioProcessor::releaseResources()
@@ -159,7 +161,9 @@ void SimpleGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 #endif
 
     juce::ScopedNoDenormals noDenormals;
-    m_simplegain.processBlock(buffer);
+     
+    m_simplegain.processBlock(buffer,midiMessages);
+
 
 #if WITH_MIDIKEYBOARD  
     midiMessages.clear(); // except you want to create new midi messages, but than say so 
