@@ -4,6 +4,7 @@
 #include <JuceHeader.h>
 #include "PlugInGUISettings.h"
 #include "SynchronBlockProcessor.h"
+#include "SmoothParameter.h"
 class SimpleGainParameter
 {
 public:
@@ -20,7 +21,7 @@ class SimpleGain : public SynchronBlockProcessor
 {
 public:
     SimpleGain();
-    void prepareToPlay();
+    void prepareToPlay(float samplerate);
     // void processBlock(juce::AudioBuffer<float>&);
     int  processSynchronBlock(std::vector <std::vector<float>>& data, juce::MidiBuffer& midiMessages);
     void setGain(float newgain_db);
@@ -30,6 +31,7 @@ public:
 private:
     float m_gaindB;
     float m_gain;
+    SmoothParameterLinear m_gainSmoothed;
     // parameter handling
     SimpleGainParameter m_gainparameter;
     void updateParameter()

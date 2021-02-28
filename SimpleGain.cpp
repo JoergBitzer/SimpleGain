@@ -3,11 +3,11 @@
 SimpleGain::SimpleGain() 
 :m_gain(1.f), SynchronBlockProcessor()
 {
-
+    m_gainSmoothed.setStartValue(m_gain);
 }
-void SimpleGain::prepareToPlay()
+void SimpleGain::prepareToPlay(float samplerate)
 {
-    
+    m_gainSmoothed.setSampleRate(samplerate);
 }
 /*void SimpleGain::processBlock(juce::AudioBuffer<float>& buffer)
 
@@ -35,16 +35,20 @@ int SimpleGain::processSynchronBlock(std::vector <std::vector<float>>& data, juc
 
     auto nrofsamplesinblock = data[0].size();
 
-    for (int channel = 0; channel < totalNumChannels; ++channel)
+    for (auto kk = 0 ; kk < nrofsamplesinblock; ++kk)
     {
-        for (auto kk = 0 ; kk < nrofsamplesinblock; ++kk)
+        for (int channel = 0; channel < totalNumChannels; ++channel)
+        {
             data[channel][kk] *= m_gain;
+            m_gain = m_gainSmoothed.updateAndGetValue();
+        }
     }    
 }
 void SimpleGain::setGain(float newgain_db)
 {
     m_gaindB = newgain_db;
     m_gain = pow(10.f,m_gaindB/20.f);
+    m_gainSmoothed.setTargetValue(m_gain);
 }
 void SimpleGain::prepareParameter(std::unique_ptr<AudioProcessorValueTreeState>&  vts)
 {

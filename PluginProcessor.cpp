@@ -119,8 +119,8 @@ void SimpleGainAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     // initialisation that you need..
     juce::ignoreUnused (samplesPerBlock);
     m_fs = sampleRate;
-    m_simplegain.prepareToPlay();
-    m_simplegain.setDesiredBlockSizeMiliSeconds(200.0, sampleRate);
+    m_simplegain.prepareToPlay(sampleRate);
+    m_simplegain.setDesiredBlockSizeMiliSeconds(4.0, sampleRate);
 }
 
 void SimpleGainAudioProcessor::releaseResources()

@@ -58,7 +58,6 @@ juce_generate_juce_header(AudioPluginSimpleGain)
 
 target_sources(AudioPluginSimpleGain
     PRIVATE
-        SynchronBlockProcessor.cpp
         SimpleGain.cpp
         PluginEditor.cpp
         PluginProcessor.cpp
